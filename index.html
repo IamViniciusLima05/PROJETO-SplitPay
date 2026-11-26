@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SplitPay | Divida a conta</title>
+  <meta name="description" content="Divida contas entre amigos de forma igual, proporcional ou por itens, e veja quanto cada um paga.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <p class="marca">Split<b>Pay</b></p>
+    <div class="topo__acoes">
+      <button class="btn sec" id="abrir-hist">Histórico <span class="num" id="n-hist">0</span></button>
+      <button class="btn sec" id="nova">Nova conta</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="col">
+      <section class="bloco">
+        <label class="titulo-conta"><span class="sr">Nome da conta</span><input id="nome-conta" maxlength="40" placeholder="Ex.: Pizza de sexta"></label>
+        <h2>1. Quem vai dividir?</h2>
+        <ul class="pessoas" id="pessoas"></ul>
+        <form class="add-pessoa" id="form-pessoa" autocomplete="off">
+          <label class="sr" for="nova-pessoa">Nome</label>
+          <input id="nova-pessoa" maxlength="20" placeholder="Nome da pessoa">
+          <button class="btn">Adicionar</button>
+        </form>
+      </section>
+
+      <section class="bloco">
+        <h2>2. Como dividir?</h2>
+        <div class="modos" role="radiogroup" aria-label="Forma de divisão">
+          <label><input type="radio" name="modo" value="igual" checked><span><b>Igual</b><small>todo mundo paga o mesmo</small></span></label>
+          <label><input type="radio" name="modo" value="proporcional"><span><b>Proporcional</b><small>por porcentagem ou peso</small></span></label>
+          <label><input type="radio" name="modo" value="itens"><span><b>Por itens</b><small>cada um paga o que consumiu</small></span></label>
+        </div>
+
+        <div class="painel-modo" id="p-total">
+          <label class="valor-grande">Valor da conta
+            <span class="moeda"><span>R$</span><input id="total" inputmode="decimal" placeholder="0,00"></span>
+          </label>
+        </div>
+        <div class="painel-modo" id="p-prop" hidden>
+          <div class="prop-topo"><span>Peso de cada pessoa</span>
+            <div class="mini-abas" role="group" aria-label="Tipo de peso"><button type="button" data-peso="pct" aria-pressed="true">%</button><button type="button" data-peso="partes" aria-pressed="false">partes</button></div>
+          </div>
+          <ul class="pesos" id="pesos"></ul>
+          <p class="aviso" id="aviso-pct"></p>
+        </div>
+        <div class="painel-modo" id="p-itens" hidden>
+          <ul class="itens" id="itens"></ul>
+          <form class="add-item" id="form-item" autocomplete="off">
+            <label class="sr" for="item-desc">Item</label><input id="item-desc" maxlength="40" placeholder="Item (ex.: Pizza grande)">
+            <label class="sr" for="item-valor">Valor</label><input id="item-valor" inputmode="decimal" placeholder="R$ 0,00">
+            <button class="btn">+</button>
+          </form>
+          <p class="nota">Toque nos nomes para marcar quem consumiu cada item. Itens sem ninguém marcado são divididos entre todos.</p>
+        </div>
+
+        <div class="extras">
+          <label class="check"><input type="checkbox" id="servico"> Taxa de serviço (10%)</label>
+          <label class="extra">Gorjeta / taxa extra<span class="moeda pequena"><span>R$</span><input id="extra" inputmode="decimal" placeholder="0,00"></span></label>
+          <label class="extra">Desconto<span class="moeda pequena"><span>R$</span><input id="desconto" inputmode="decimal" placeholder="0,00"></span></label>
+        </div>
+      </section>
+
+      <section class="bloco">
+        <h2>3. Quem pagou a conta?</h2>
+        <div class="pagou-modo" role="group" aria-label="Quem pagou">
+          <label class="check"><input type="radio" name="pagou" value="um" checked> Uma pessoa pagou tudo</label>
+          <label class="check"><input type="radio" name="pagou" value="varios"> Mais de uma pessoa pagou</label>
+          <label class="check"><input type="radio" name="pagou" value="ninguem"> Ainda não foi paga</label>
+        </div>
+        <div id="pagou-um"><label class="sr" for="pagador">Quem pagou</label><select id="pagador"></select></div>
+        <ul class="pagamentos" id="pagou-varios" hidden></ul>
+        <p class="aviso" id="aviso-pago"></p>
+      </section>
+    </div>
+
+    <aside class="resumo" id="resumo" aria-live="polite"></aside>
+  </main>
+
+  <dialog id="dlg-hist" aria-labelledby="dh-titulo">
+    <div class="hist">
+      <div class="hist__topo"><h2 id="dh-titulo">Divisões salvas</h2><button class="fechar" data-fechar aria-label="Fechar">×</button></div>
+      <ul id="lista-hist"></ul>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="js/script.js"></script>
+</body>
+</html>
